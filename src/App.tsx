@@ -6,12 +6,14 @@ import { SLDView } from './components/SLDView';
 import { TrendView } from './components/TrendView';
 import GatewayBFD from './components/GatewayBFD';
 import { AVEAIChat } from './components/AVEAIChat';
+import { LoginPage } from './components/LoginPage';
 import { motion, AnimatePresence } from 'motion/react';
-import { Activity, AlertTriangle, Clock, Database, Download, RefreshCw, Wifi, WifiOff, ChevronRight, BarChart3, FileSpreadsheet, Zap, Info, Maximize2, Settings, History, ShieldAlert, Columns } from 'lucide-react';
+import { Activity, AlertTriangle, Clock, Database, Download, RefreshCw, Wifi, WifiOff, ChevronRight, BarChart3, FileSpreadsheet, Zap, Info, Maximize2, Settings, History, ShieldAlert, Columns, LogOut } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import * as XLSX from 'xlsx';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [meters, setMeters] = useState<MeterData[]>(MOCK_METERS);
   const [gatewayOnline, setGatewayOnline] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -266,7 +268,14 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-scada-bg text-scada-text font-mono overflow-hidden relative">
+    <>
+      <AnimatePresence>
+        {!isLoggedIn && (
+          <LoginPage onLogin={() => setIsLoggedIn(true)} />
+        )}
+      </AnimatePresence>
+
+      <div className="h-screen flex flex-col bg-scada-bg text-scada-text font-mono overflow-hidden relative">
       {showCRT && <div className="crt-overlay" />}
       <div className="scanline" />
 
@@ -362,6 +371,13 @@ export default function App() {
                 <span className="tabular-nums">{currentTime.toLocaleDateString('vi-VN')} {currentTime.toLocaleTimeString('vi-VN', { hour12: false })}</span>
               </div>
             </div>
+            <button 
+              onClick={() => setIsLoggedIn(false)}
+              className="p-2 bg-scada-red/10 border border-scada-red/30 text-scada-red rounded-lg hover:bg-scada-red/20 transition-all group"
+              title="Logout System"
+            >
+              <LogOut className="w-4 h-4 group-hover:scale-110 transition-transform" />
+            </button>
           </div>
         </div>
       </header>
@@ -1386,5 +1402,6 @@ export default function App() {
         )}
       </Modal>
     </div>
+    </>
   );
 }
