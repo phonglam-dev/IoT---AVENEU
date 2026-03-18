@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-scada-bg: #050505;
+  --color-scada-panel: #111111;
+  --color-scada-border: #2a2a2a;
+  --color-scada-text: #d0d0d0;
+  --color-scada-green: #00ff41;
+  --color-scada-red: #ff3131;
+  --color-scada-yellow: #faff00;
+  --color-scada-grey: #666666;
+  --color-scada-blue: #00e5ff;
+}
+
+@layer base {
+  body {
+    @apply bg-scada-bg text-scada-text font-mono overflow-hidden selection:bg-scada-blue/30;
+  }
+}
+
+.scada-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.scanline {
+  width: 100%;
+  height: 100px;
+  z-index: 100;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.1;
+  position: absolute;
+  bottom: 100%;
+  animation: scanline 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanline {
+  0% { bottom: 100%; }
+  100% { bottom: -100px; }
+}
+
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.blink {
+  animation: blink-animation 0.8s steps(2, start) infinite;
+}
+
+@keyframes blink-animation {
+  to { opacity: 0.3; }
+}
+
+.glow-green { text-shadow: 0 0 8px rgba(0, 255, 65, 0.4); }
+.glow-blue { text-shadow: 0 0 8px rgba(0, 229, 255, 0.4); }
+.glow-red { text-shadow: 0 0 8px rgba(255, 49, 49, 0.4); }
+
+.panel-corner {
+  position: relative;
+}
+
+.panel-corner::before, .panel-corner::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-color: var(--color-scada-grey);
+  border-style: solid;
+  opacity: 0.5;
+}
+
+.panel-corner-tl::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.panel-corner-tr::after { top: -1px; right: -1px; border-width: 1px 1px 0 0; }
+.panel-corner-bl::before { bottom: -1px; left: -1px; border-width: 0 0 1px 1px; }
+.panel-corner-br::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }

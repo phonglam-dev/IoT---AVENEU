@@ -1,0 +1,5 @@
+{
+  "name": "AVENUE - DEMO - Energy Monitor",
+  "description": "A professional SCADA-style energy monitoring dashboard for industrial solar plants and factories, featuring real-time Modbus RTU meter data, mimic diagrams, and industrial trend analysis.",
+  "requestFramePermissions": []
+}
