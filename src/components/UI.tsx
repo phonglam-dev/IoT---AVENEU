@@ -29,7 +29,7 @@ export const ScadaPanel: React.FC<{
         "panel-corner panel-corner-tl panel-corner-tr panel-corner-bl panel-corner-br",
         "hover:-translate-y-0.5 hover:scale-[1.005]",
         onClick && "cursor-pointer",
-        isInset && "shadow-[inset_0_0_20px_rgba(0,0,0,0.6)] bg-black/30",
+        isInset && "shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] bg-scada-bg/30",
         status && statusGlows[status],
         !status && "hover:shadow-[0_0_15px_rgba(0,229,255,0.1)] hover:border-scada-blue/30",
         className
@@ -82,7 +82,7 @@ export const ScadaButton: React.FC<{
   const variants = {
     primary: 'bg-scada-blue/10 border-scada-blue/50 text-scada-blue hover:bg-scada-blue/20',
     danger: 'bg-scada-red/10 border-scada-red/50 text-scada-red hover:bg-scada-red/20',
-    ghost: 'bg-transparent border-transparent text-scada-grey hover:text-white',
+    ghost: 'bg-transparent border-transparent text-scada-grey hover:text-scada-text',
     outline: 'bg-transparent border-scada-border text-scada-grey hover:border-scada-blue hover:text-scada-blue'
   };
 
@@ -118,11 +118,11 @@ export const Modal: React.FC<{
         <div className="flex items-center justify-between p-4 border-b border-scada-border">
           <div className="flex items-center gap-3">
             <div className="w-1.5 h-4 bg-scada-blue" />
-            <h3 className="text-sm font-bold uppercase tracking-widest text-white">{title}</h3>
+            <h3 className="text-sm font-bold uppercase tracking-widest text-scada-text">{title}</h3>
           </div>
           <button 
             onClick={onClose}
-            className="text-scada-grey hover:text-white transition-colors p-1"
+            className="text-scada-grey hover:text-scada-text transition-colors p-1"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -148,7 +148,7 @@ export const ScadaInput = ({ label, value, onChange, unit }: { label: string, va
         type="number" 
         value={value} 
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-16 bg-black border border-scada-border text-scada-blue text-[11px] px-1 py-0.5 focus:outline-none focus:border-scada-blue"
+        className="w-16 bg-scada-bg border border-scada-border text-scada-blue text-[11px] px-1 py-0.5 focus:outline-none focus:border-scada-blue"
       />
       {unit && <span className="text-[9px] text-scada-grey">{unit}</span>}
     </div>

@@ -1,19 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;600&display=swap');
 @import "tailwindcss";
 
+:root {
+  --scada-bg: #050505;
+  --scada-panel: #111111;
+  --scada-border: #2a2a2a;
+  --scada-text: #d0d0d0;
+  --scada-green: #00ff41;
+  --scada-red: #ff3131;
+  --scada-yellow: #faff00;
+  --scada-grey: #666666;
+  --scada-blue: #00e5ff;
+  --scada-grid-opacity: 0.03;
+}
+
+.light-theme {
+  --scada-bg: #f0f2f5;
+  --scada-panel: #ffffff;
+  --scada-border: #d1d5db;
+  --scada-text: #1f2937;
+  --scada-green: #059669;
+  --scada-red: #dc2626;
+  --scada-yellow: #d97706;
+  --scada-grey: #6b7280;
+  --scada-blue: #2563eb;
+  --scada-grid-opacity: 0.05;
+}
+
 @theme {
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   
-  --color-scada-bg: #050505;
-  --color-scada-panel: #111111;
-  --color-scada-border: #2a2a2a;
-  --color-scada-text: #d0d0d0;
-  --color-scada-green: #00ff41;
-  --color-scada-red: #ff3131;
-  --color-scada-yellow: #faff00;
-  --color-scada-grey: #666666;
-  --color-scada-blue: #00e5ff;
+  --color-scada-bg: var(--scada-bg);
+  --color-scada-panel: var(--scada-panel);
+  --color-scada-border: var(--scada-border);
+  --color-scada-text: var(--scada-text);
+  --color-scada-green: var(--scada-green);
+  --color-scada-red: var(--scada-red);
+  --color-scada-yellow: var(--scada-yellow);
+  --color-scada-grey: var(--scada-grey);
+  --color-scada-blue: var(--scada-blue);
 }
 
 @layer base {

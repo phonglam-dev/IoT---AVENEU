@@ -8,12 +8,13 @@ import GatewayBFD from './components/GatewayBFD';
 import { AVEAIChat } from './components/AVEAIChat';
 import { LoginPage } from './components/LoginPage';
 import { motion, AnimatePresence } from 'motion/react';
-import { Activity, AlertTriangle, Clock, Database, Download, RefreshCw, Wifi, WifiOff, ChevronRight, BarChart3, FileSpreadsheet, Zap, Info, Maximize2, Settings, History, ShieldAlert, Columns, LogOut } from 'lucide-react';
+import { Activity, AlertTriangle, Clock, Database, Download, RefreshCw, Wifi, WifiOff, ChevronRight, BarChart3, FileSpreadsheet, Zap, Info, Maximize2, Settings, History, ShieldAlert, Columns, LogOut, Sun, Moon } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import * as XLSX from 'xlsx';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLightTheme, setIsLightTheme] = useState(false);
   const [meters, setMeters] = useState<MeterData[]>(MOCK_METERS);
   const [gatewayOnline, setGatewayOnline] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -268,16 +269,26 @@ export default function App() {
   };
 
   return (
-    <>
+    <div className={cn(
+      "h-screen flex flex-col bg-scada-bg text-scada-text font-mono overflow-hidden relative",
+      isLightTheme && "light-theme"
+    )}>
       <AnimatePresence>
         {!isLoggedIn && (
-          <LoginPage onLogin={() => setIsLoggedIn(true)} />
+          <LoginPage 
+            onLogin={() => setIsLoggedIn(true)} 
+            isLightTheme={isLightTheme}
+            onToggleTheme={() => setIsLightTheme(!isLightTheme)}
+          />
         )}
       </AnimatePresence>
 
-      <div className="h-screen flex flex-col bg-scada-bg text-scada-text font-mono overflow-hidden relative">
-      {showCRT && <div className="crt-overlay" />}
-      <div className="scanline" />
+      {showCRT && !isLightTheme && <div className="crt-overlay" />}
+      {!isLightTheme && <div className="scanline" />}
+
+      {/* Grid Background */}
+      <div className="absolute inset-0 opacity-[var(--scada-grid-opacity)] pointer-events-none" 
+           style={{ backgroundImage: 'linear-gradient(var(--scada-border) 1px, transparent 1px), linear-gradient(90deg, var(--scada-border) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
       {/* Header */}
       <header className="h-16 border-b border-scada-border bg-scada-panel/80 backdrop-blur-md flex items-center px-6 justify-between shrink-0 z-10">
@@ -293,7 +304,7 @@ export default function App() {
             <motion.h1 
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              className="text-xl font-bold tracking-tighter uppercase text-white"
+              className="text-xl font-bold tracking-tighter uppercase text-scada-text"
             >
               Hệ Thống Giám Sát Điện Năng Nhà Máy <span className="text-scada-blue">EM220</span>
             </motion.h1>
@@ -312,12 +323,12 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-8">
-          <div className="flex bg-black/60 border border-scada-border rounded-lg p-1 shadow-inner">
+          <div className="flex bg-scada-bg/60 border border-scada-border rounded-lg p-1 shadow-inner">
             <button 
               onClick={() => setView('dashboard')}
               className={cn(
                 "px-4 py-1.5 text-[10px] uppercase font-bold transition-all rounded-md",
-                view === 'dashboard' ? "bg-scada-blue text-white shadow-[0_0_10px_rgba(0,229,255,0.4)]" : "text-scada-grey hover:text-white"
+                view === 'dashboard' ? "bg-scada-blue text-white shadow-[0_0_10px_rgba(0,229,255,0.4)]" : "text-scada-grey hover:text-scada-text"
               )}
             >
               Dashboard
@@ -326,7 +337,7 @@ export default function App() {
               onClick={() => setView('sld')}
               className={cn(
                 "px-4 py-1.5 text-[10px] uppercase font-bold transition-all rounded-md",
-                view === 'sld' ? "bg-scada-blue text-white shadow-[0_0_10px_rgba(0,229,255,0.4)]" : "text-scada-grey hover:text-white"
+                view === 'sld' ? "bg-scada-blue text-white shadow-[0_0_10px_rgba(0,229,255,0.4)]" : "text-scada-grey hover:text-scada-text"
               )}
             >
               SLD View
@@ -335,7 +346,7 @@ export default function App() {
               onClick={() => setView('trends')}
               className={cn(
                 "px-4 py-1.5 text-[10px] uppercase font-bold transition-all rounded-md",
-                view === 'trends' ? "bg-scada-blue text-white shadow-[0_0_10px_rgba(0,229,255,0.4)]" : "text-scada-grey hover:text-white"
+                view === 'trends' ? "bg-scada-blue text-white shadow-[0_0_10px_rgba(0,229,255,0.4)]" : "text-scada-grey hover:text-scada-text"
               )}
             >
               Trend View
@@ -356,6 +367,13 @@ export default function App() {
               title="Toggle Full Screen"
             >
               <Maximize2 className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => setIsLightTheme(!isLightTheme)}
+              className={cn("p-1.5 rounded border transition-colors", isLightTheme ? "border-scada-blue text-scada-blue" : "border-scada-border text-scada-grey")}
+              title={isLightTheme ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            >
+              {isLightTheme ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <button 
               onClick={() => setShowCRT(!showCRT)}
@@ -1333,6 +1351,7 @@ export default function App() {
         meters={meters} 
         gatewayOnline={gatewayOnline} 
         mainBreakerOpen={mainBreakerOpen} 
+        isLightTheme={isLightTheme}
       />
 
       {/* Footer */}
@@ -1343,7 +1362,7 @@ export default function App() {
         </div>
         <div className="flex gap-6 font-bold">
           <span className="flex items-center gap-1.5"><div className="w-1 h-1 bg-scada-blue rounded-full" /> SYSTEM: <span className="text-scada-blue">SCADA_ENERGY_V2.4</span></span>
-          <span className="flex items-center gap-1.5"><div className="w-1 h-1 bg-scada-blue rounded-full" /> DEVELOPED BY: <span className="text-white">IoT ARCHITECT</span></span>
+          <span className="flex items-center gap-1.5"><div className="w-1 h-1 bg-scada-blue rounded-full" /> DEVELOPED BY: <span className="text-scada-text">IoT ARCHITECT</span></span>
         </div>
       </footer>
       {/* Threshold Config Modal */}
@@ -1402,6 +1421,5 @@ export default function App() {
         )}
       </Modal>
     </div>
-    </>
   );
 }

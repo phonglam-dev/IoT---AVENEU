@@ -12,15 +12,19 @@ import {
   Loader2,
   Terminal,
   Server,
-  Network
+  Network,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { cn } from './UI';
 
 interface LoginPageProps {
   onLogin: () => void;
+  isLightTheme?: boolean;
+  onToggleTheme?: () => void;
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+export const LoginPage: React.FC<LoginPageProps> = ({ onLogin, isLightTheme, onToggleTheme }) => {
   const [step, setStep] = useState<'gateway' | 'auth'>('gateway');
   const [gateway, setGateway] = useState('');
   const [port, setPort] = useState('502');
@@ -88,15 +92,29 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] bg-scada-bg flex items-center justify-center overflow-hidden font-mono">
+    <div className={cn(
+      "fixed inset-0 z-[1000] bg-scada-bg flex items-center justify-center overflow-hidden font-mono",
+      isLightTheme && "light-theme"
+    )}>
       {/* Background Effects */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.05)_0%,transparent_70%)]" />
-      <div className="crt-overlay opacity-50" />
-      <div className="scanline" />
+      {!isLightTheme && <div className="crt-overlay opacity-50" />}
+      {!isLightTheme && <div className="scanline" />}
       
       {/* Animated Grid Background */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'linear-gradient(#00e5ff 1px, transparent 1px), linear-gradient(90deg, #00e5ff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      <div className="absolute inset-0 opacity-[var(--scada-grid-opacity)] pointer-events-none" 
+           style={{ backgroundImage: 'linear-gradient(var(--scada-border) 1px, transparent 1px), linear-gradient(90deg, var(--scada-border) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+
+      {/* Theme Toggle in Login */}
+      <div className="absolute top-6 right-6">
+        <button 
+          onClick={onToggleTheme}
+          className={cn("p-2 rounded-lg border transition-colors", isLightTheme ? "border-scada-blue text-scada-blue" : "border-scada-border text-scada-grey")}
+          title={isLightTheme ? "Switch to Dark Mode" : "Switch to Light Mode"}
+        >
+          {isLightTheme ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </button>
+      </div>
 
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -125,7 +143,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 <Cpu className="w-8 h-8 text-scada-blue" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white tracking-tighter uppercase">
+                <h1 className="text-xl font-bold text-scada-text tracking-tighter uppercase">
                   AVENUE <span className="text-scada-blue">SCADA</span>
                 </h1>
                 <p className="text-[10px] text-scada-grey uppercase tracking-widest font-bold">Energy Monitor v2.5</p>
@@ -162,8 +180,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                           <div className="flex items-center gap-3">
                             <Server className={cn("w-4 h-4", gateway === gw.id ? "text-scada-blue" : "text-scada-grey")} />
                             <div>
-                              <div className="text-[11px] font-bold">{gw.name}</div>
-                              <div className="text-[8px] opacity-50">{gw.id} • {gw.latency}</div>
+                              <div className="text-[11px] font-bold text-scada-text">{gw.name}</div>
+                              <div className="text-[8px] opacity-50 text-scada-grey">{gw.id} • {gw.latency}</div>
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
@@ -238,7 +256,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
                           placeholder="Enter operator ID"
-                          className="w-full bg-black/60 border border-scada-border rounded-lg py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-scada-blue transition-all placeholder:text-scada-grey/30"
+                          className="w-full bg-black/60 border border-scada-border rounded-lg py-3 pl-10 pr-4 text-xs text-scada-text focus:outline-none focus:border-scada-blue transition-all placeholder:text-scada-grey/30"
                         />
                       </div>
                     </div>
@@ -254,7 +272,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••••••"
-                          className="w-full bg-black/60 border border-scada-border rounded-lg py-3 pl-10 pr-4 text-xs text-white focus:outline-none focus:border-scada-blue transition-all placeholder:text-scada-grey/30"
+                          className="w-full bg-black/60 border border-scada-border rounded-lg py-3 pl-10 pr-4 text-xs text-scada-text focus:outline-none focus:border-scada-blue transition-all placeholder:text-scada-grey/30"
                         />
                       </div>
                     </div>

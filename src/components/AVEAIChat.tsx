@@ -33,9 +33,10 @@ interface AVEAIChatProps {
   meters: MeterData[];
   gatewayOnline: boolean;
   mainBreakerOpen: boolean;
+  isLightTheme?: boolean;
 }
 
-export const AVEAIChat: React.FC<AVEAIChatProps> = ({ meters, gatewayOnline, mainBreakerOpen }) => {
+export const AVEAIChat: React.FC<AVEAIChatProps> = ({ meters, gatewayOnline, mainBreakerOpen, isLightTheme }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [input, setInput] = useState('');
@@ -184,7 +185,7 @@ export const AVEAIChat: React.FC<AVEAIChatProps> = ({ meters, gatewayOnline, mai
                   <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-scada-green rounded-full border-2 border-scada-panel animate-pulse" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-white uppercase tracking-widest">AVE - AI</h3>
+                  <h3 className="text-xs font-bold text-scada-text uppercase tracking-widest">AVE - AI</h3>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1 h-1 bg-scada-green rounded-full" />
                     <span className="text-[8px] text-scada-green font-bold uppercase">Neural Core Active</span>
@@ -275,10 +276,13 @@ export const AVEAIChat: React.FC<AVEAIChatProps> = ({ meters, gatewayOnline, mai
                       <div className={cn(
                         "p-3 rounded-lg text-[11px] leading-relaxed",
                         msg.role === 'user' 
-                          ? "bg-scada-blue/10 text-white border border-scada-blue/20" 
-                          : "bg-black/40 text-scada-grey border border-scada-border/50"
+                          ? "bg-scada-blue/10 text-scada-text border border-scada-blue/20" 
+                          : "bg-scada-panel/40 text-scada-text border border-scada-border/50"
                       )}>
-                        <div className="markdown-body prose prose-invert prose-xs max-w-none">
+                        <div className={cn(
+                          "markdown-body prose prose-xs max-w-none",
+                          !isLightTheme && "prose-invert"
+                        )}>
                           <ReactMarkdown>{msg.text}</ReactMarkdown>
                         </div>
                         <div className="mt-1 text-[8px] opacity-40 text-right">
@@ -305,7 +309,7 @@ export const AVEAIChat: React.FC<AVEAIChatProps> = ({ meters, gatewayOnline, mai
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 border-t border-scada-border bg-black/40">
+                <div className="p-4 border-t border-scada-border bg-scada-panel/40">
                   <div className="relative">
                     <input 
                       type="text"
@@ -313,12 +317,12 @@ export const AVEAIChat: React.FC<AVEAIChatProps> = ({ meters, gatewayOnline, mai
                       onChange={(e) => setInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                       placeholder="Ask AVE - AI about the system..."
-                      className="w-full bg-scada-panel border border-scada-border rounded-lg py-2.5 pl-4 pr-12 text-[11px] text-white focus:outline-none focus:border-scada-blue transition-colors placeholder:text-scada-grey/50"
+                      className="w-full bg-scada-panel border border-scada-border rounded-lg py-2.5 pl-4 pr-12 text-[11px] text-scada-text focus:outline-none focus:border-scada-blue transition-colors placeholder:text-scada-grey/50"
                     />
                     <button 
                       onClick={handleSend}
                       disabled={!input.trim() || isLoading}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-scada-blue text-black rounded-md hover:bg-scada-blue/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-scada-blue text-white rounded-md hover:bg-scada-blue/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Send className="w-4 h-4" />
                     </button>
